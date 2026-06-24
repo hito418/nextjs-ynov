@@ -1,0 +1,37 @@
+[
+  {
+    "email": "camille@supastore.test",
+    "name": "Camille Laurent",
+    "role": "admin",
+    "password": "supastore",
+    "createdAt": "2025-09-02T09:15:00.000Z"
+  },
+  {
+    "email": "noah@supastore.test",
+    "name": "Noah Bensekri",
+    "role": "manager",
+    "password": "supastore",
+    "createdAt": "2025-11-18T14:42:00.000Z"
+  },
+  {
+    "email": "lea@example.com",
+    "name": "Léa Fontaine",
+    "role": "customer",
+    "password": "supastore",
+    "createdAt": "2026-01-07T18:30:00.000Z"
+  },
+  {
+    "email": "marco@example.com",
+    "name": "Marco Vidal",
+    "role": "customer",
+    "password": "supastore",
+    "createdAt": "2026-03-21T11:05:00.000Z"
+  },
+  {
+    "email": "yasmine@example.com",
+    "name": "Yasmine Abadi",
+    "role": "customer",
+    "password": "supastore",
+    "createdAt": "2026-05-30T08:20:00.000Z"
+  }
+]

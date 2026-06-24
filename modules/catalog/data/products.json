@@ -1,0 +1,98 @@
+[
+  {
+    "slug": "cafe-aurora",
+    "name": "Café de spécialité Aurora",
+    "description": "Un café d'altitude aux notes de fruits rouges et de cacao, torréfié en petits lots pour révéler une tasse vibrante et soyeuse. Idéal en filtre comme en espresso.",
+    "priceCents": 1490,
+    "currency": "EUR",
+    "image": "/products/cafe-aurora.svg",
+    "category": "Épicerie",
+    "featured": true,
+    "specs": [
+      { "label": "Origine", "value": "Éthiopie, Yirgacheffe" },
+      { "label": "Torréfaction", "value": "Filtre" },
+      { "label": "Poids", "value": "250 g" },
+      { "label": "Notes", "value": "Fruits rouges, cacao, jasmin" }
+    ]
+  },
+  {
+    "slug": "theiere-fonte",
+    "name": "Théière en fonte Komorebi",
+    "description": "Une théière en fonte émaillée qui conserve la chaleur durablement. Son infuseur amovible en inox accueille thés en vrac et infusions pour une dégustation lente.",
+    "priceCents": 4900,
+    "currency": "EUR",
+    "image": "/products/theiere-fonte.svg",
+    "category": "Maison",
+    "featured": true,
+    "specs": [
+      { "label": "Matériau", "value": "Fonte émaillée" },
+      { "label": "Contenance", "value": "0,8 L" },
+      { "label": "Infuseur", "value": "Inox amovible" },
+      { "label": "Entretien", "value": "Lavage à la main" }
+    ]
+  },
+  {
+    "slug": "miel-lavande",
+    "name": "Miel de lavande de Provence",
+    "description": "Récolté sur les plateaux de Haute-Provence, ce miel crémeux offre un parfum floral délicat et une texture onctueuse. Parfait sur des tartines ou dans une tisane.",
+    "priceCents": 1190,
+    "currency": "EUR",
+    "image": "/products/miel-lavande.svg",
+    "category": "Épicerie",
+    "featured": false,
+    "specs": [
+      { "label": "Origine", "value": "Haute-Provence (France)" },
+      { "label": "Poids", "value": "375 g" },
+      { "label": "Texture", "value": "Crémeux" },
+      { "label": "Récolte", "value": "Été 2025" }
+    ]
+  },
+  {
+    "slug": "chocolat-grand-cru",
+    "name": "Chocolat noir grand cru 72%",
+    "description": "Une tablette de pure origine au profil intense et fruité. Travaillée à partir de fèves fermentées avec soin, elle révèle une longueur en bouche remarquable.",
+    "priceCents": 590,
+    "currency": "EUR",
+    "image": "/products/chocolat-grand-cru.svg",
+    "category": "Épicerie",
+    "featured": true,
+    "specs": [
+      { "label": "Cacao", "value": "72 %" },
+      { "label": "Origine", "value": "Pérou, Piura" },
+      { "label": "Poids", "value": "100 g" },
+      { "label": "Sans", "value": "Gluten, lécithine" }
+    ]
+  },
+  {
+    "slug": "mug-gres",
+    "name": "Mug en grès émaillé Brume",
+    "description": "Façonné à la main, ce mug en grès aux nuances minérales tient parfaitement dans la paume. Chaque pièce est unique, avec un émail réactif aux reflets changeants.",
+    "priceCents": 2400,
+    "currency": "EUR",
+    "image": "/products/mug-gres.svg",
+    "category": "Maison",
+    "featured": false,
+    "specs": [
+      { "label": "Matériau", "value": "Grès émaillé" },
+      { "label": "Contenance", "value": "30 cl" },
+      { "label": "Fabrication", "value": "Tournée à la main" },
+      { "label": "Compatibilité", "value": "Lave-vaisselle, micro-ondes" }
+    ]
+  },
+  {
+    "slug": "carnet-relie",
+    "name": "Carnet relié toile Ardoise",
+    "description": "Un carnet à la reliure cousue qui s'ouvre à plat, garni d'un papier ivoire 100 g idéal pour l'encre. Couverture toilée robuste et signet ruban pour ne rien perdre.",
+    "priceCents": 1850,
+    "currency": "EUR",
+    "image": "/products/carnet-relie.svg",
+    "category": "Papeterie",
+    "featured": false,
+    "specs": [
+      { "label": "Format", "value": "A5 (14,8 × 21 cm)" },
+      { "label": "Pages", "value": "192, papier ivoire 100 g" },
+      { "label": "Reliure", "value": "Cousue, ouverture à plat" },
+      { "label": "Réglure", "value": "Pointillés" }
+    ]
+  }
+]

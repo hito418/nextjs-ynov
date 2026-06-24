@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  /* Warm "épicerie fine" palette for the storefront */
+  --color-cream: #faf7f2;
+  --color-paper: #ffffff;
+  --color-ink: #1f2d3d;
+  --color-muted: #6b7280;
+  --color-gold: #c9a36a;
+  --color-gold-dark: #a9824a;
+  --color-line: #e8e1d6;
+
+  /* Fonts: body sans + decorative script for the brand & headings */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-script: var(--font-dancing), cursive;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Fade-in used by the front-office template.tsx on every navigation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
