@@ -152,6 +152,17 @@ export function ProductEditForm({ product }: { product: Product }) {
         >
           {pending ? "Enregistrement…" : "Enregistrer"}
         </button>
+        {/* Step 05 — submits the same form with __test_error set, so the action
+            returns an error we can display without touching real data. */}
+        <button
+          type="submit"
+          name="__test_error"
+          value="1"
+          disabled={pending}
+          className="rounded-md border border-red-300 px-4 py-2.5 text-sm font-medium text-red-700 transition hover:bg-red-50 disabled:opacity-60"
+        >
+          Tester une erreur
+        </button>
         <Link
           href="/admin/products"
           className="text-sm text-slate-500 hover:text-slate-800"

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getCurrentUser } from "./auth";
-import { isStaff } from "./domain/user";
+import { isStaff, trigram } from "./domain/user";
 import { signOutAction } from "@/app/actions/auth";
 
 // Per-user header chrome as a Server Component. It reads the session itself
@@ -19,8 +19,6 @@ export async function AccountNav() {
     );
   }
 
-  const firstName = user.name.split(" ")[0];
-
   return (
     <>
       {isStaff(user.role) && (
@@ -32,7 +30,13 @@ export async function AccountNav() {
         </Link>
       )}
       <span className="flex items-center gap-3">
-        <span className="text-ink/80">Bonjour {firstName}</span>
+        <span
+          className="grid h-8 w-8 place-items-center rounded-full bg-ink text-xs font-semibold text-cream"
+          title={user.name}
+          aria-label={user.name}
+        >
+          {trigram(user.name)}
+        </span>
         <form action={signOutAction}>
           <button
             type="submit"

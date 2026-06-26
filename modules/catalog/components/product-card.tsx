@@ -1,15 +1,26 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatPrice, type Product } from "../domain/product";
+import { PrefetchLink } from "./prefetch-link";
 
-// Pure server component: no interactivity, just presentation. It's rendered on
-// the server as part of the home page's RSC tree.
-export function ProductCard({ product }: { product: Product }) {
-  return (
-    <Link
-      href={`/products/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-paper shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-    >
+const CARD_CLASS =
+  "group flex flex-col overflow-hidden rounded-2xl border border-line bg-paper shadow-sm transition hover:-translate-y-1 hover:shadow-md";
+
+// Server component: no interactivity of its own, just presentation. The outer
+// link is either a plain <Link> (A/B variant "A" → default prefetching) or a
+// <PrefetchLink> (variant "B" → hover-only prefetch). The variant is decided by
+// the parent (which reads the `ab_prefetch` cookie) and passed in, so this stays
+// a Server Component either way.
+export function ProductCard({
+  product,
+  prefetchOnHover = false,
+}: {
+  product: Product;
+  prefetchOnHover?: boolean;
+}) {
+  const href = `/products/${product.slug}`;
+  const content = (
+    <>
       <div className="relative aspect-square overflow-hidden bg-cream">
         <Image
           src={product.image}
@@ -33,6 +44,20 @@ export function ProductCard({ product }: { product: Product }) {
           {formatPrice(product.price)}
         </p>
       </div>
+    </>
+  );
+
+  if (prefetchOnHover) {
+    return (
+      <PrefetchLink href={href} className={CARD_CLASS}>
+        {content}
+      </PrefetchLink>
+    );
+  }
+
+  return (
+    <Link href={href} className={CARD_CLASS}>
+      {content}
     </Link>
   );
 }

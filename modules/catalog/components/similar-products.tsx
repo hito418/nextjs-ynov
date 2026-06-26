@@ -1,4 +1,5 @@
 import { connection } from "next/server";
+import { cookies } from "next/headers";
 import { getSimilarProducts } from "../repository";
 import { ProductCard } from "./product-card";
 import { simulateLatency, delayFromEnv } from "@/lib/workshop";
@@ -25,12 +26,22 @@ export async function SimilarProducts({
   const products = await getSimilarProducts(slug, category);
   if (products.length === 0) return null;
 
+  // Step 07 — variant "B" gets hover-only prefetch on these links instead of
+  // the default viewport prefetch. This component is already a dynamic hole
+  // (await connection() above), so reading the cookie costs nothing extra.
+  const variant = (await cookies()).get("ab_prefetch")?.value;
+  const prefetchOnHover = variant === "B";
+
   return (
     <section>
       <h2 className="mb-5 font-script text-3xl text-ink">Produits similaires</h2>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            prefetchOnHover={prefetchOnHover}
+          />
         ))}
       </div>
     </section>

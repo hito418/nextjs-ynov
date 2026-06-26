@@ -30,3 +30,17 @@ export function isStaff(role: UserRole): boolean {
 export function landingPath(role: UserRole): string {
   return isStaff(role) ? "/admin/products" : "/";
 }
+
+/**
+ * Short identity badge for the header: initials of each name part (e.g.
+ * "Camille Durand" → "CD"), falling back to the first letters of a single
+ * word. Always uppercase, max 3 characters.
+ */
+export function trigram(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  const letters =
+    parts.length > 1
+      ? parts.map((p) => p[0]).join("")
+      : (parts[0] ?? "?").slice(0, 3);
+  return letters.slice(0, 3).toUpperCase();
+}

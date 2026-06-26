@@ -40,6 +40,16 @@ export default function LoginPage() {
 
         <LoginForm />
 
+        <p className="mt-6 text-center text-sm text-muted">
+          Pas encore de compte ?{" "}
+          <Link
+            href="/register"
+            className="text-ink underline underline-offset-2"
+          >
+            S&apos;inscrire
+          </Link>
+        </p>
+
         <div className="mt-6 space-y-1 rounded-lg bg-cream px-3 py-2 text-xs text-muted">
           <p>
             Démo client : <code>lea@example.com</code> / <code>supastore</code>

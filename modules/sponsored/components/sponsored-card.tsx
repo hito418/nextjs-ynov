@@ -1,17 +1,26 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatPrice } from "@/modules/catalog/domain/product";
+import { PrefetchLink } from "@/modules/catalog/components/prefetch-link";
 import type { SponsoredProduct } from "../types";
+
+const CARD_CLASS =
+  "group flex flex-col overflow-hidden rounded-2xl border border-gold/60 bg-paper shadow-sm transition hover:-translate-y-1 hover:shadow-md";
 
 // A sponsored product card. Links to the special /sponsored/[handle] page and
 // carries a "Sponsorisé" badge. Deliberately has NO add-to-cart button — these
-// products are not part of our catalog/cart.
-export function SponsoredCard({ product }: { product: SponsoredProduct }) {
-  return (
-    <Link
-      href={`/sponsored/${product.handle}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-gold/60 bg-paper shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-    >
+// products are not part of our catalog/cart. Like ProductCard, the A/B "B"
+// variant uses hover-only prefetch (see PrefetchLink).
+export function SponsoredCard({
+  product,
+  prefetchOnHover = false,
+}: {
+  product: SponsoredProduct;
+  prefetchOnHover?: boolean;
+}) {
+  const href = `/sponsored/${product.handle}`;
+  const content = (
+    <>
       <div className="relative aspect-square overflow-hidden bg-cream">
         {product.image && (
           <Image
@@ -32,6 +41,20 @@ export function SponsoredCard({ product }: { product: SponsoredProduct }) {
           {formatPrice(product.price)}
         </p>
       </div>
+    </>
+  );
+
+  if (prefetchOnHover) {
+    return (
+      <PrefetchLink href={href} className={CARD_CLASS}>
+        {content}
+      </PrefetchLink>
+    );
+  }
+
+  return (
+    <Link href={href} className={CARD_CLASS}>
+      {content}
     </Link>
   );
 }

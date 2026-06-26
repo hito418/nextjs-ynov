@@ -1,5 +1,6 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 import type { Product } from "./domain/product";
 
@@ -58,7 +59,12 @@ async function specsByProduct(
   return grouped;
 }
 
-export async function getAllProducts(): Promise<Product[]> {
+// Step 04 — the home page reads these on every request. They rarely change, so
+// we wrap them in `unstable_cache` under the shared "products" tag. The product
+// update action calls `revalidateTag("products", …)` to drop the cache after an
+// edit. (Next 16 supersedes `unstable_cache` with `use cache`, but the brief
+// names `unstable_cache` + `revalidateTag` explicitly, so we use them here.)
+async function queryAllProducts(): Promise<Product[]> {
   const products = await db
     .selectFrom("products")
     .selectAll()
@@ -69,7 +75,11 @@ export async function getAllProducts(): Promise<Product[]> {
   return products.map((p) => toDomain(p, specs.get(p.id) ?? []));
 }
 
-export async function getFeaturedProducts(): Promise<Product[]> {
+export const getAllProducts = unstable_cache(queryAllProducts, ["all-products"], {
+  tags: ["products"],
+});
+
+async function queryFeaturedProducts(): Promise<Product[]> {
   const products = await db
     .selectFrom("products")
     .selectAll()
@@ -80,6 +90,12 @@ export async function getFeaturedProducts(): Promise<Product[]> {
   const specs = await specsByProduct(products.map((p) => p.id));
   return products.map((p) => toDomain(p, specs.get(p.id) ?? []));
 }
+
+export const getFeaturedProducts = unstable_cache(
+  queryFeaturedProducts,
+  ["featured-products"],
+  { tags: ["products"] },
+);
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const product = await db
