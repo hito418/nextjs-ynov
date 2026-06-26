@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import type { Product } from "../domain/product";
 
 export type ProductTab = "description" | "specifications";
@@ -8,16 +11,18 @@ const TABS: { key: ProductTab; label: string }[] = [
   { key: "specifications", label: "Spécifications" },
 ];
 
-// Tabs are plain links that set the `tab` search param. The page is a Server
-// Component that reads `searchParams`, so switching tabs re-renders on the
-// server with no client-side state (workshop step 08).
-export function ProductTabs({
-  product,
-  active,
-}: {
-  product: Product;
-  active: ProductTab;
-}) {
+// Client component (workshop step 01). The active tab comes from the `?tab=`
+// query string via `useSearchParams`. Reading the query string here — instead
+// of `searchParams` in the page — is what lets the product page stay fully
+// static: `searchParams` can never be statically prerendered, so we isolate
+// that dynamic read in a client island wrapped in <Suspense> by the page.
+export function ProductTabs({ product }: { product: Product }) {
+  const searchParams = useSearchParams();
+  const active: ProductTab =
+    searchParams.get("tab") === "specifications"
+      ? "specifications"
+      : "description";
+
   return (
     <div>
       <div role="tablist" className="flex gap-1 border-b border-line">

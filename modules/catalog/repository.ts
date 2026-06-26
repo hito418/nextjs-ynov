@@ -94,6 +94,29 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   return toDomain(product, specs.get(product.id) ?? []);
 }
 
+/**
+ * Workshop step 04 — "produits similaires". Other products sharing the current
+ * product's category, excluding itself. A plain synchronous DB read (no fetch,
+ * no request-time API), so it completes during prerendering and stays static.
+ */
+export async function getSimilarProducts(
+  slug: string,
+  category: string,
+  limit = 3,
+): Promise<Product[]> {
+  const products = await db
+    .selectFrom("products")
+    .selectAll()
+    .where("category", "=", category)
+    .where("slug", "!=", slug)
+    .orderBy("name", "asc")
+    .limit(limit)
+    .execute();
+
+  const specs = await specsByProduct(products.map((p) => p.id));
+  return products.map((p) => toDomain(p, specs.get(p.id) ?? []));
+}
+
 export async function getProductById(id: string): Promise<Product | null> {
   const product = await db
     .selectFrom("products")

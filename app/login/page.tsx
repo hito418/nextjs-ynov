@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -7,14 +8,24 @@ import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = { title: "Connexion" };
 
-// Lives outside the (admin) group so it is NOT behind the auth gate — otherwise
-// the gate would redirect the login page to itself. Already signed in? Skip it.
-export default async function LoginPage() {
+// Step 09 (Cache Components): the login card is static, but the "already signed
+// in? skip the form" check reads the session cookie. We isolate that cookie
+// read in a Suspense-wrapped child so it's a dynamic hole, leaving the card as
+// the static shell.
+async function RedirectIfSignedIn() {
   const user = await getCurrentUser();
   if (user) redirect(landingPath(user.role));
+  return null;
+}
 
+// Lives outside the (admin) group so it is NOT behind the auth gate — otherwise
+// the gate would redirect the login page to itself.
+export default function LoginPage() {
   return (
     <main className="flex min-h-dvh items-center justify-center px-6 py-12">
+      <Suspense fallback={null}>
+        <RedirectIfSignedIn />
+      </Suspense>
       <div className="w-full max-w-sm rounded-2xl border border-line bg-paper p-8 shadow-sm">
         <Link
           href="/"

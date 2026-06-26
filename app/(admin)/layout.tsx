@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/modules/account/auth";
@@ -10,11 +11,33 @@ import { signOutAction } from "@/app/actions/auth";
 //
 // It also acts as the auth gate: every page it wraps is rendered only after a
 // valid admin/manager session is confirmed (server-side, in this RSC).
-export default async function AdminLayout({
+//
+// Step 09 (Cache Components): the auth gate reads the session cookie — purely
+// request-time work — and the admin pages read uncached DB data. The whole
+// authenticated section is therefore dynamic, so we wrap it (chrome + children)
+// in a single <Suspense> boundary to satisfy the "no dynamic work outside
+// Suspense" rule. There's no useful static shell for an auth-gated page.
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  return (
+    <Suspense fallback={<AdminShellFallback />}>
+      <AdminShell>{children}</AdminShell>
+    </Suspense>
+  );
+}
+
+function AdminShellFallback() {
+  return (
+    <div className="grid min-h-dvh place-items-center bg-slate-100 text-slate-500">
+      Chargement de l’administration…
+    </div>
+  );
+}
+
+async function AdminShell({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
   // Not signed in → go log in. Signed in but not staff (a customer) → send to
   // the storefront instead of /login, otherwise we'd bounce in a redirect loop.
