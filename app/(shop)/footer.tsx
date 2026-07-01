@@ -1,26 +1,26 @@
-import { cacheLife } from "next/cache";
+import { getTranslations } from "@/modules/i18n/dictionary";
 
-// Workshop step 09 — "Footer, on use cache pour éviter un use client".
+// Workshop step 07 — the footer is now translated.
 //
-// The footer wants to show the current year (new Date()), which is
-// non-deterministic. Under Cache Components that would force the surrounding
-// scope out of the static shell (or push us toward a client component just to
-// read the date). Marking the component `use cache` lets it evaluate the date
-// once at cache-fill time and prerender into the shell — no "use client", no
-// dynamic rendering. cacheLife('max') keeps it effectively static.
+// It previously used `use cache` (step 09) to prerender the current year into
+// the static shell. i18n changes that: reading the NEXT_LOCALE cookie is a
+// request-time operation, incompatible with `use cache`. So the footer becomes a
+// dynamic server component and is rendered inside a <Suspense> boundary by the
+// shop layout. The year is still computed server-side (no client component).
 export async function Footer() {
-  "use cache";
-  cacheLife("max");
+  const { dict } = await getTranslations();
   const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-line bg-paper">
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-between gap-2 px-6 py-8 text-sm text-muted sm:flex-row">
         <p>
-          <span className="font-script text-lg text-ink">My Supa Store</span> —
-          atelier Next.js
+          <span className="font-script text-lg text-ink">My Supa Store</span> —{" "}
+          {dict.footer.tagline}
         </p>
-        <p>© {year} · Que du mock, pas de vraie commande</p>
+        <p>
+          © {year} · {dict.footer.copy}
+        </p>
       </div>
     </footer>
   );

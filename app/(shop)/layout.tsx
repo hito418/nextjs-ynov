@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { CartSummary } from "@/modules/cart/cart-summary";
 import { AccountNav } from "@/modules/account/account-nav";
+import { LocalizedNav } from "@/modules/i18n/localized-nav";
 import { Footer } from "./footer";
 
 // Front-office layout (route group "(shop)"). The parenthesised folder name is
@@ -25,9 +26,13 @@ export default function ShopLayout({
             My Supa Store
           </Link>
           <nav className="flex items-center gap-5 text-sm">
-            <Link href="/" className="text-ink/80 transition hover:text-ink">
-              Boutique
-            </Link>
+            {/* Step 07 — cookie-driven i18n: the shop link + language switch
+                read NEXT_LOCALE, so they're a dynamic hole behind Suspense. */}
+            <Suspense
+              fallback={<span className="h-5 w-24 rounded bg-line" aria-hidden />}
+            >
+              <LocalizedNav />
+            </Suspense>
 
             <Suspense
               fallback={<span className="h-5 w-20 rounded bg-line" aria-hidden />}
@@ -50,7 +55,11 @@ export default function ShopLayout({
         {children}
       </main>
 
-      <Footer />
+      <Suspense
+        fallback={<div className="h-24 border-t border-line bg-paper" />}
+      >
+        <Footer />
+      </Suspense>
     </div>
   );
 }

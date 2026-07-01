@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "shop": "Shop",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "admin": "Admin"
+  },
+  "footer": {
+    "tagline": "a Next.js workshop",
+    "copy": "All mock, no real orders"
+  },
+  "language": {
+    "label": "Language",
+    "fr": "Français",
+    "en": "English"
+  }
+}

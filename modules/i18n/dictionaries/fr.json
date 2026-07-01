@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "shop": "Boutique",
+    "login": "Se connecter",
+    "logout": "Déconnexion",
+    "admin": "Admin"
+  },
+  "footer": {
+    "tagline": "atelier Next.js",
+    "copy": "Que du mock, pas de vraie commande"
+  },
+  "language": {
+    "label": "Langue",
+    "fr": "Français",
+    "en": "English"
+  }
+}

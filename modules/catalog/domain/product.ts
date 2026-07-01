@@ -25,6 +25,13 @@ export type Product = {
   category: string;
   featured: boolean;
   specs: Specification[];
+  /**
+   * Units available. Optional because the current DB doesn't track it yet —
+   * `undefined` means "stock not tracked", treated as available. Present as a
+   * first-class domain concept so the purchasability rule (isInStock) is
+   * testable and ready when inventory lands.
+   */
+  stock?: number;
 };
 
 /** Format a Money value for display, e.g. `12,90 €`. */
@@ -33,4 +40,13 @@ export function formatPrice(price: Money, locale = "fr-FR"): string {
     style: "currency",
     currency: price.currency,
   }).format(price.amountCents / 100);
+}
+
+/**
+ * Business rule — is the product purchasable?
+ * `undefined` stock = not tracked = available. A tracked stock is in stock only
+ * when strictly positive (0 or negative → out of stock).
+ */
+export function isInStock(product: Pick<Product, "stock">): boolean {
+  return product.stock === undefined || product.stock > 0;
 }

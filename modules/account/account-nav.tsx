@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getCurrentUser } from "./auth";
 import { isStaff, trigram } from "./domain/user";
 import { signOutAction } from "@/app/actions/auth";
+import { getTranslations } from "@/modules/i18n/dictionary";
 
 // Per-user header chrome as a Server Component. It reads the session itself
 // (rather than receiving it from the layout) so that, come step 09 (PPR), the
@@ -9,12 +10,15 @@ import { signOutAction } from "@/app/actions/auth";
 // read becomes a self-contained dynamic hole. For steps 04–08 there's no
 // boundary yet, so this read keeps the route dynamic.
 export async function AccountNav() {
-  const user = await getCurrentUser();
+  const [user, { dict }] = await Promise.all([
+    getCurrentUser(),
+    getTranslations(),
+  ]);
 
   if (!user) {
     return (
       <Link href="/login" className="text-ink/80 transition hover:text-ink">
-        Se connecter
+        {dict.nav.login}
       </Link>
     );
   }
@@ -26,7 +30,7 @@ export async function AccountNav() {
           href="/admin/products"
           className="text-muted transition hover:text-ink"
         >
-          Admin
+          {dict.nav.admin}
         </Link>
       )}
       <span className="flex items-center gap-3">
@@ -42,7 +46,7 @@ export async function AccountNav() {
             type="submit"
             className="text-muted underline-offset-2 transition hover:text-ink hover:underline"
           >
-            Déconnexion
+            {dict.nav.logout}
           </button>
         </form>
       </span>

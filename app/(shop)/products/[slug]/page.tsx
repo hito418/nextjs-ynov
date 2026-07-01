@@ -41,13 +41,48 @@ export async function generateStaticParams() {
   return products.map((product) => ({ slug: product.slug }));
 }
 
+// Workshop step 02 — dynamic, per-product metadata.
+//
+// `params` is a Promise in Next 16 and must be awaited. The `title` string here
+// feeds the root layout's `%s · <site>` template automatically. We also emit
+// keywords, a robots directive, and an Open Graph card using the product image
+// (metadataBase in the root layout turns the relative /products/*.svg into an
+// absolute URL for scrapers).
 export async function generateMetadata(
   props: PageProps<"/products/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const product = await getProductBySlug(slug);
-  if (!product) return {};
-  return { title: product.name, description: product.description };
+
+  // No product → tell crawlers not to index this URL.
+  if (!product) {
+    return { title: "Produit introuvable", robots: { index: false, follow: false } };
+  }
+
+  const price = formatPrice(product.price);
+  const description = `${product.description} — ${price}.`;
+
+  return {
+    title: product.name, // → "<name> · Mon super store" via the template
+    description,
+    keywords: [product.name, product.category, "boutique", "épicerie fine"],
+    robots: { index: true, follow: true },
+    alternates: { canonical: `/products/${product.slug}` },
+    openGraph: {
+      type: "website",
+      title: product.name,
+      description,
+      url: `/products/${product.slug}`,
+      images: [
+        {
+          url: product.image,
+          alt: product.name,
+          width: 1200,
+          height: 1200,
+        },
+      ],
+    },
+  };
 }
 
 export default async function ProductPage(props: PageProps<"/products/[slug]">) {

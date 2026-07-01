@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getRoleBySessionToken } from "@/modules/account/repository";
 import { isStaff } from "@/modules/account/domain/user";
+import { LOCALE_COOKIE, matchLocale } from "@/modules/i18n/config";
 
 // Proxy (Next 16's renamed Middleware) — runs before the route renders, on the
 // Node.js runtime. It does two jobs:
@@ -35,6 +36,20 @@ export async function proxy(request: NextRequest) {
 
   // --- 2. A/B assignment ---
   const response = NextResponse.next();
+
+  // --- 2b. First-visit locale (step 07 bonus) ---
+  // If NEXT_LOCALE isn't set yet, negotiate it from the Accept-Language header
+  // so first-time visitors land in their preferred language. Once set, the
+  // in-app language switch (document.cookie) owns it and this never overrides.
+  if (!request.cookies.get(LOCALE_COOKIE)) {
+    const locale = matchLocale(request.headers.get("accept-language"));
+    response.cookies.set(LOCALE_COOKIE, locale, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
+  }
+
   const forced = searchParams.get(AB_COOKIE);
   const existing = request.cookies.get(AB_COOKIE)?.value;
 
